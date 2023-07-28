@@ -1,4 +1,0 @@
-{
-    "iis.configDir": "${workspaceFolder}\\.vs\\BudgetTracker\\config",
-    "dotnet.defaultSolution": "BudgetTracker.Api/BudgetTracker.Api.sln"
-}
