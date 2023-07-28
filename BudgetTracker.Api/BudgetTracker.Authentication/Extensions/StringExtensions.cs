@@ -4,8 +4,13 @@ namespace BudgetTracker.Authentication.Extensions
 	using System.Security.Cryptography;
 	using System.Text;
 
+    /// <summary>A string extensions.</summary>
 	public static class StringExtensions
 	{
+        /// <summary>A string extension method that converts a value to a sha 256.</summary>
+        /// <exception cref="ArgumentNullException">Thrown when one or more required arguments are null.</exception>
+        /// <param name="value">The value to act on.</param>
+        /// <returns>Value as a string.</returns>
 		public static string ToSha256(this string value)
 		{
 			if (value == null)
