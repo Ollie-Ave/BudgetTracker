@@ -1,0 +1,97 @@
+@import './base.css';
+
+.card{
+    background-color: var(--colour-surface-200);
+    padding: var(--card-padding);
+
+    box-shadow: 0.1rem 0.1rem 0.1rem 0.0rem rgba(0,0,0,0.75);
+}
+
+.card-rounded{
+    border-radius: var(--card-border-radius);
+}
+
+.btn{
+    display: block;
+    padding: 0.5rem 0.8rem;
+    
+    border-radius: var(--button-border-radius);
+
+    border-width: 0.1rem;
+    border-style: solid;
+
+    font-weight: bold;
+    font-family: 'Titillium Web', sans-serif;
+
+    margin: 0.5rem;
+    cursor: pointer;
+
+    transition: 0.2s ease-in-out;
+}
+
+.btn-proceed{
+    background-color: var(--colour-primary-300);
+    color: var(--colour-text-dark);
+
+    border-color: var(--colour-primary-300);
+}
+
+.btn-proceed:hover{
+    background-color: var(--colour-surface-300);
+
+    border-color: var(--colour-primary-400);
+
+    color: var(--colour-primary-400)
+}
+
+.btn-warning{
+    background-color: var(--colour-surface-mixed-400);
+    color: var(--colour-text-white);
+
+    border-color: var(--colour-surface-mixed-400);
+}
+
+.btn-warning:hover{
+    background-color: var(--colour-primary-600);
+    color: var(--colour-text-dark);
+
+    border-color: var(--colour-text-dark);
+}
+
+.text-input{
+    padding: var(--input-padding);
+
+    border-style: solid;
+    border-color: var(--colour-surface-300);
+    border-width: 0rem 0rem 0.2rem 0rem;
+
+    background-color: var(--colour-surface-200);
+
+    color: white;
+
+    transition: 0.2s ease-in-out;
+
+    position: relative;
+    width: 100%;
+}
+
+.text-input:focus,
+input:focus,
+select:focus,
+textarea:focus{
+    outline: none;
+
+    border-color: var(--colour-primary-400);
+}
+
+.text-muted {
+    color: var(--colour-text-muted);
+}
+
+.positive{
+    color: var(--colour-success);
+}
+
+.negative{
+    color: var(--colour-danger);
+}

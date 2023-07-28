@@ -1,0 +1,75 @@
+:root {
+          /** PRIMARY colourS */
+          --colour-primary-100:  #f02b4f;
+          --colour-primary-200:  #f64f60;
+          --colour-primary-300:  #fb6a72;
+          --colour-primary-400:  #fe8185;
+          --colour-primary-500:  #ff9898;
+          --colour-primary-600:  #ffadac;
+          
+          /** SURFACE colourS */
+          --colour-surface-100:  #121212;
+          --colour-surface-200:  #282828;
+          --colour-surface-300:  #3f3f3f;
+          --colour-surface-400:  #575757;
+          --colour-surface-500:  #717171;
+          --colour-surface-600:  #8b8b8b;
+          
+          --colour-surface-100-transparent: #1212121f;
+
+          /** MIXED SURFACE colourS */
+          --colour-surface-mixed-100:  #261818;
+          --colour-surface-mixed-200:  #3b2d2d;
+          --colour-surface-mixed-300:  #514444;
+          --colour-surface-mixed-400:  #675c5b;
+          --colour-surface-mixed-500:  #7f7574;
+          --colour-surface-mixed-600:  #978f8f; 
+
+          /** Misc colours **/
+          --colour-danger: var(--colour-primary-100);
+          --colour-success: #00bc4b;
+          --colour-warning: #f5a623;
+
+          /** Toaster colours **/
+          --toastify-color-dark: var(--colour-surface-300) !important ;
+
+          /** Text Colours */
+          --colour-text-white: #fff;
+          --colour-text-dark: #000;
+          --colour-text-muted: var(--colour-surface-500);
+
+          /* Button Variables */
+          --button-border-radius: 1rem;
+
+          /* Input Variables */
+          --input-padding: 0.5rem 1rem;
+
+          /* Card Variables */
+          --card-border-radius: 1rem;
+          --card-padding: 2rem 3rem;
+}
+
+body {
+  min-height: 100vh;
+  color: var(--colour-text-white);
+  background: var(--colour-surface-100);
+  transition: colour 0.5s, background-colour 0.5s;
+  line-height: 1.6;
+  font-family: 'Titillium Web', sans-serif;
+  font-size: 0.9rem;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  margin: 0px;
+}
+
+button{
+  font-family: 'Titillium Web', sans-serif;
+}
+
+
+input {
+  font-family: 'Titillium Web', sans-serif;
+  font-size: 0.9rem;
+}
