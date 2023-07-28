@@ -34,7 +34,7 @@
         {
             IActionResult returnValue = this.Unauthorized();
 
-            if (this.authenticationService.TryValidateApiKey(apikey, out string _))
+            if (this.authenticationService.ApiKeyIsValid(apikey))
             {
                 decimal totalExpenses = this.transactionService.GetTotalExpensesForAccountFrom(id, DateTime.Now.AddMonths(-1));
 

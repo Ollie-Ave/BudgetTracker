@@ -2,24 +2,22 @@ using BudgetTracker.Authentication.Models;
 
 namespace BudgetTracker.Authentication.Interfaces
 {
-	/// <summary>
-	/// The authentication service is used to authorise users and generate API keys.
-	/// </summary>
+    /// <summary>Interface for authentication service.</summary>
 	public interface IAuthenticationService
 	{
-		/// <summary>
-		/// Returns an API key for the given credentials, or an empty string if the credentials are invalid.
-		/// </summary>
-		/// <param name="credentials"></param>
-		/// <returns></returns>
+        /// <summary>Authorises the given credentials.</summary>
+        /// <param name="credentials">The credentials.</param>
+        /// <returns>A string.</returns>
 		public string Authorise(LoginModel credentials);
-		
-		/// <summary>
-		/// Returns the credentials for the given email address, or null if the email address is not found.
-		/// </summary>
-		/// <param name="apiKey"></param>
-		/// <param name="email"></param>
-		/// <returns></returns>
-		public bool TryValidateApiKey(string apiKey, out string email);
+
+        /// <summary>Gets UID from API key.</summary>
+        /// <param name="apiKey">.</param>
+        /// <returns>The UID from API key.</returns>
+		public int GetUidFromApiKey(string apiKey);
+
+        /// <summary>API key is valid.</summary>
+        /// <param name="apiKey">.</param>
+        /// <returns>True if it succeeds, false if it fails.</returns>
+        public bool ApiKeyIsValid(string apiKey);
 	}
 }

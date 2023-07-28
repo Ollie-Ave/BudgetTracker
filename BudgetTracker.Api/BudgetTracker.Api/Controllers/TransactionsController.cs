@@ -36,7 +36,7 @@
         {
             IActionResult returnValue = this.Unauthorized();
 
-            if (this.authenticationService.TryValidateApiKey(apiKey, out string _))
+            if (this.authenticationService.ApiKeyIsValid(apiKey))
             {
                 List<TransactionViewModel> transactions = this.transactionService.GetTransactionsForAccount(id, page);
 
@@ -56,7 +56,7 @@
         {
             IActionResult returnValue = this.Unauthorized();
 
-            if (this.authenticationService.TryValidateApiKey(apiKey, out string _))
+            if (this.authenticationService.ApiKeyIsValid(apiKey))
             {
                 decimal newBalance = this.transactionService.UpdateTransaction(transaction);
 
@@ -71,7 +71,7 @@
         {
             IActionResult returnValue = this.Unauthorized();
 
-            if (this.authenticationService.TryValidateApiKey(apiKey, out string _))
+            if (this.authenticationService.ApiKeyIsValid(apiKey))
             {
                 decimal newBalance = this.transactionService.AddTransaction(transaction, id);
 
@@ -90,7 +90,7 @@
         {
             IActionResult returnValue = this.Unauthorized();
 
-            if (this.authenticationService.TryValidateApiKey(apiKey, out string _))
+            if (this.authenticationService.ApiKeyIsValid(apiKey))
             {
                 decimal newBalance = this.transactionService.DeleteTransaction(id);
 

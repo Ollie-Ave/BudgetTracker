@@ -27,7 +27,7 @@
         {
             IActionResult returnValue = this.Unauthorized();
 
-            if (this.authenticationService.TryValidateApiKey(apikey, out string _))
+            if (this.authenticationService.ApiKeyIsValid(apikey))
             {
                 List<decimal> totalExpenses = this.transactionService.GetDayExpenseTotals(id, 7);
 
@@ -46,7 +46,7 @@
         {
             IActionResult returnValue = this.Unauthorized();
 
-            if (this.authenticationService.TryValidateApiKey(apikey, out string _))
+            if (this.authenticationService.ApiKeyIsValid(apikey))
             {
                 List<decimal> totalIncome = this.transactionService.GetDayIncomeTotals(id, 7);
 
@@ -65,7 +65,7 @@
         {
             IActionResult returnValue = this.Unauthorized();
 
-            if (this.authenticationService.TryValidateApiKey(apikey, out string _))
+            if (this.authenticationService.ApiKeyIsValid(apikey))
             {
                 List<decimal> totalDifferences = this.transactionService.GetDayDifferenceTotals(id, 7);
 

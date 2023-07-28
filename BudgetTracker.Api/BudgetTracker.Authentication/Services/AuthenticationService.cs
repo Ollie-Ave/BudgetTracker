@@ -1,108 +1,106 @@
 namespace BudgetTracker.Authentication.Services
 {
-	using System;
-	using System.Linq;
-	using BudgetTracker.Authentication.Extensions;
-	using BudgetTracker.Authentication.Interfaces;
-	using BudgetTracker.Authentication.Models;
-	using BudgetTracker.DataAccess.Context;
-	using Microsoft.Extensions.Caching.Memory;
+    using System;
+    using System.Linq;
+    using BudgetTracker.Authentication.Extensions;
+    using BudgetTracker.Authentication.Interfaces;
+    using BudgetTracker.Authentication.Models;
+    using BudgetTracker.DataAccess.Context;
+    using Microsoft.Extensions.Caching.Memory;
 
-	/// <summary>
-	/// The authentication service is used to authorise users and generate API keys.
-	/// </summary>
-	public class AuthenticationService : IAuthenticationService
-	{	
-		/// <summary>
-		/// The database context is used to retrieve credentials from the database.
-		/// </summary>
-		private readonly ApplicationDbContext context;
-		
-		/// <summary>
-		/// The memory cache is used to store API keys and their associated email addresses.
-		/// </summary>
-		private readonly IMemoryCache memoryCache;
+    /// <summary>A service for accessing authentications information.</summary>
+    /// <seealso cref="T:BudgetTracker.Authentication.Interfaces.IAuthenticationService"/>
+    public class AuthenticationService : IAuthenticationService
+    {	
+        /// <summary>(Immutable) the context.</summary>
+        private readonly ApplicationDbContext context;
 
-		/// <summary>
-		/// Initialises a new instance of the <see cref="AuthenticationService"/> class.
-		/// </summary>
-		/// <param name="context"></param>
-		/// <param name="memoryCache"></param>
-		public AuthenticationService(ApplicationDbContext context, IMemoryCache memoryCache)
-		{
-			this.context = context;
-			this.memoryCache = memoryCache;
-		}
+        /// <summary>(Immutable) the memory cache.</summary>
+        private readonly IMemoryCache memoryCache;
 
-        /// <summary>
-        /// Returns true if the API key is valid, false otherwise.
-        /// </summary>
-        /// <param name="apiKey"></param>
-        /// <param name="email"></param>
-        /// <returns></returns>
-        public bool TryValidateApiKey(string apiKey, out string email)
+        /// <summary>Initialises a new instance of the <see cref="BudgetTracker.Authentication.Services.AuthenticationService"/> class.</summary>
+        /// <param name="context">The context.</param>
+        /// <param name="memoryCache">The memory cache.</param>
+        public AuthenticationService(ApplicationDbContext context, IMemoryCache memoryCache)
+        {
+            this.context = context;
+            this.memoryCache = memoryCache;
+        }
+
+        /// <summary>API key is valid.</summary>
+        /// <param name="apiKey">The API key.</param>
+        /// <returns>True if it succeeds, false if it fails.</returns>
+        /// <seealso cref="M:IAuthenticationService.ApiKeyIsValid(string)"/>
+        public bool ApiKeyIsValid(string apiKey)
         {
             bool returnValue = false;
-            email = string.Empty;
 
-            if (this.memoryCache.TryGetValue(apiKey, out string? emailFromCache) && emailFromCache is not null)
+            if (this.memoryCache.TryGetValue(apiKey, out _))
             {
-                email = emailFromCache;
                 returnValue = true;
             }
 
             return returnValue;
         }
 
-        /// <summary>
-        /// Returns an API key for the given credentials, or an empty string if the credentials are invalid.
-        /// </summary>
-        /// <param name="credentials"></param>
-        /// <returns></returns>
+        /// <summary>Gets email from API key.</summary>
+        /// <exception cref="UnauthorizedAccessException">Thrown when an Unauthorized Access error condition occurs.</exception>
+        /// <param name="apiKey">The API key.</param>
+        /// <returns>The email from API key.</returns>
+        /// <seealso cref="M:IAuthenticationService.GetEmailFromApiKey(string)"/>
+        public int GetUidFromApiKey(string apiKey)
+        {
+            this.memoryCache.TryGetValue(apiKey, out int emailFromCache);
+
+            return emailFromCache;
+        }
+
+        /// <summary>Authorises the given credentials.</summary>
+        /// <param name="credentials">The credentials.</param>
+        /// <returns>A string.</returns>
+        /// <seealso cref="M:IAuthenticationService.Authorise(LoginModel)"/>
         public string Authorise(LoginModel credentials)
-		{
-			string returnValue = string.Empty;
-			
-			LoginModel? credentialsFromDb = this.GetCredentialsFromDb(credentials.Email);
-			
-			if (credentialsFromDb is not null && credentialsFromDb.Password == credentials.Password.ToSha256())
-			{			
-				returnValue = this.GetApiKey(credentials.Email);
-			}
-			
-			return returnValue;
-		}
-		
-		/// <summary>
-		/// Returns a new API key for the given email address.
-		/// </summary>
-		/// <param name="email"></param>
-		/// <returns></returns>
-		/// <exception cref="NullReferenceException"></exception>
-		private string GetApiKey(string email)
-		{
-			string apiKey = Guid.NewGuid().ToString();
+        {
+            string returnValue = string.Empty;
+            
+            LoginModel? credentialsFromDb = this.context.Accounts
+                                                    .Select(account => new LoginModel
+                                                    {
+                                                        Email = account.Email,
+                                                        Password = account.Password,
+                                                    })
+                                                    .FirstOrDefault(account => account.Email == credentials.Email.Trim());
 
-			this.memoryCache.CreateEntry(apiKey);
-			this.memoryCache.Set(apiKey, email, TimeSpan.FromDays(30));
+            string inputtedPasswordHash = credentials.Password.ToSha256();
 
-			return apiKey;
-		}
-		
-		/// <summary>
-		/// Returns the credentials from the database for the given email address, or null if the email address is not found.
-		/// </summary>
-		/// <param name="email"></param>
-		/// <returns></returns>
-		private LoginModel? GetCredentialsFromDb(string email)
-		{
-			return this.context.Accounts
-								.Select(account => new LoginModel 
-								{
-									Email = account.Email,
-									Password = account.Password,
-								})
-								.FirstOrDefault(account => account.Email == email.Trim());
-		}
-	}
+            if (credentialsFromDb is not null && credentialsFromDb.Password == inputtedPasswordHash)
+            {
+                int accountUid = this.context.Accounts
+                                            .Select(a => new
+                                            {
+                                                a.Email,
+                                                a.Uid,
+                                            })
+                                            .ToList()
+                                            .First(a => a.Email == credentials.Email).Uid;
+
+                returnValue = this.GetApiKey(accountUid);
+            }
+
+            return returnValue;
+        }
+
+        /// <summary>Gets API key.</summary>
+        /// <param name="accountUId">Identifier for the account u.</param>
+        /// <returns>The API key.</returns>
+        private string GetApiKey(int accountUId)
+        {
+            string apiKey = Guid.NewGuid().ToString();
+
+            this.memoryCache.CreateEntry(apiKey);
+            this.memoryCache.Set(apiKey, accountUId, TimeSpan.FromDays(30));
+
+            return apiKey;
+        }
+    }
 }

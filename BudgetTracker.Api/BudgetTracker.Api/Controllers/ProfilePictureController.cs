@@ -48,7 +48,7 @@ namespace BudgetTracker.Api.Controllers
 		{
 			IActionResult returnValue = this.Unauthorized();
 
-			if (this.authenticationService.TryValidateApiKey(apiKey, out string _))
+			if (this.authenticationService.ApiKeyIsValid(apiKey))
 			{
 				returnValue = this.File(this.profilePictureService.GetProfilePicture(id), profilePictureContentType);
 			}

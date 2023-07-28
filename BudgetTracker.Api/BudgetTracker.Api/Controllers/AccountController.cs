@@ -1,7 +1,8 @@
 namespace BudgetTracker.Api.Controllers
 {
 	using BudgetTracker.Accounts.Interfaces;
-	using BudgetTracker.Authentication.Interfaces;
+    using BudgetTracker.Accounts.Models;
+    using BudgetTracker.Authentication.Interfaces;
 	using Microsoft.AspNetCore.Mvc;
 
 	/// <summary>
@@ -42,9 +43,13 @@ namespace BudgetTracker.Api.Controllers
 		{
 			IActionResult returnValue = this.Unauthorized();
 
-			if (this.authenticationService.TryValidateApiKey(apiKey, out string email))
+			if (this.authenticationService.ApiKeyIsValid(apiKey))
 			{
-				returnValue = this.Ok(this.accountService.GetAccountFromEmail(email));
+				int accountUid = this.authenticationService.GetUidFromApiKey(apiKey);
+
+				AccountViewModel account = this.accountService.GetAccountFromUid(accountUid);
+
+                returnValue = this.Ok(account);
 			}
 
 			return returnValue;
