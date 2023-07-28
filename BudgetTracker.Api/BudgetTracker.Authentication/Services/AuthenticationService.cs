@@ -33,13 +33,33 @@ namespace BudgetTracker.Authentication.Services
 			this.context = context;
 			this.memoryCache = memoryCache;
 		}
-		
-		/// <summary>
-		/// Returns an API key for the given credentials, or an empty string if the credentials are invalid.
-		/// </summary>
-		/// <param name="credentials"></param>
-		/// <returns></returns>
-		public string Authorise(LoginModel credentials)
+
+        /// <summary>
+        /// Returns true if the API key is valid, false otherwise.
+        /// </summary>
+        /// <param name="apiKey"></param>
+        /// <param name="email"></param>
+        /// <returns></returns>
+        public bool TryValidateApiKey(string apiKey, out string email)
+        {
+            bool returnValue = false;
+            email = string.Empty;
+
+            if (this.memoryCache.TryGetValue(apiKey, out string? emailFromCache) && emailFromCache is not null)
+            {
+                email = emailFromCache;
+                returnValue = true;
+            }
+
+            return returnValue;
+        }
+
+        /// <summary>
+        /// Returns an API key for the given credentials, or an empty string if the credentials are invalid.
+        /// </summary>
+        /// <param name="credentials"></param>
+        /// <returns></returns>
+        public string Authorise(LoginModel credentials)
 		{
 			string returnValue = string.Empty;
 			
@@ -59,7 +79,7 @@ namespace BudgetTracker.Authentication.Services
 		/// <param name="email"></param>
 		/// <returns></returns>
 		/// <exception cref="NullReferenceException"></exception>
-		public string GetApiKey(string email)
+		private string GetApiKey(string email)
 		{
 			string apiKey = Guid.NewGuid().ToString();
 
@@ -67,26 +87,6 @@ namespace BudgetTracker.Authentication.Services
 			this.memoryCache.Set(apiKey, email, TimeSpan.FromDays(30));
 
 			return apiKey;
-		}
-
-		/// <summary>
-		/// Returns true if the API key is valid, false otherwise.
-		/// </summary>
-		/// <param name="apiKey"></param>
-		/// <param name="email"></param>
-		/// <returns></returns>
-		public bool TryValidateApiKey(string apiKey, out string email)
-		{
-			bool returnValue = false;
-			email = string.Empty;
-
-			if (this.memoryCache.TryGetValue(apiKey, out string? emailFromCache) && emailFromCache is not null)
-			{
-				email = emailFromCache;
-				returnValue = true;
-			}
-
-			return returnValue;
 		}
 		
 		/// <summary>

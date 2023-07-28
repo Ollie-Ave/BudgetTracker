@@ -15,13 +15,6 @@ namespace BudgetTracker.Authentication.Interfaces
 		public string Authorise(LoginModel credentials);
 		
 		/// <summary>
-		/// Returns a new API key for the given email address.
-		/// </summary>
-		/// <param name="email"></param>
-		/// <returns></returns>
-		public string GetApiKey(string email);
-
-		/// <summary>
 		/// Returns the credentials for the given email address, or null if the email address is not found.
 		/// </summary>
 		/// <param name="apiKey"></param>
