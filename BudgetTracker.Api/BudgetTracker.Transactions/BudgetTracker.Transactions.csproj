@@ -11,4 +11,9 @@
     <ProjectReference Include="..\BudgetTracker.DataAccess\BudgetTracker.DataAccess.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>BudgetTracker.UnitTests.Transactions</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
 </Project>
