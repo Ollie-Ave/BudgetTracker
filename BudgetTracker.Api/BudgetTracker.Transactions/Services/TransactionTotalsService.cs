@@ -34,7 +34,7 @@ namespace BudgetTracker.Transactions.Services
 
             DateTime dateToProcess = fromDate.Date;
 
-            while (dateToProcess.Date > DateTime.UtcNow.Date)
+            while (dateToProcess.Date < DateTime.UtcNow.Date)
             {
                 returnValue.Add(allTransactions
                     .Where(t => t.TimeOfPurchase.Date == dateToProcess.Date)

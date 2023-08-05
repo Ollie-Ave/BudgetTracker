@@ -37,11 +37,11 @@
         }
 
         [HttpGet("sum/{id}")]
-        public IActionResult GetSummedTotals(int id, [FromQuery] string api, [FromQuery] int days, [FromQuery] TotalType totalType)
+        public IActionResult GetSummedTotals(int id, [FromQuery] string apiKey, [FromQuery] int days, [FromQuery] TotalType totalType)
         {
             IActionResult returnValue = this.Unauthorized();
 
-            if (this.authenticationService.ApiKeyIsValid(api))
+            if (this.authenticationService.ApiKeyIsValid(apiKey))
             {
                 DateTime dateToGetFrom = DateTime.Now.AddDays(days * -1);
 

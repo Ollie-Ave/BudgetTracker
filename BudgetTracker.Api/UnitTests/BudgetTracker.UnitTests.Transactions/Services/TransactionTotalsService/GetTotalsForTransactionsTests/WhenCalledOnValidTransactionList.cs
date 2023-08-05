@@ -63,6 +63,8 @@ namespace BudgetTracker.UnitTests.Transactions.TransactionTotalsService.GetTotal
 
             Assert.Multiple(() =>
             {
+                Assert.That(actualResult, Has.Count.EqualTo(expectedResult.Count));
+
                 for (int i = 0; i < actualResult.Count; i++)
                 {
                     Assert.That(expectedResult[i], Is.EqualTo(actualResult[i]), $"Day {i}");

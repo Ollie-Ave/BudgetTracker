@@ -15,11 +15,24 @@ namespace BudgetTracker.UnitTests.Transactions.TransactionTotalsService.GetTotal
 
             DateTime triggerFromDate = DateTime.UtcNow.AddDays(-3);
 
-            List<decimal> expectedResult = new();
+            List<decimal> expectedResult = new()
+            {
+                0,
+                0,
+                0,
+            };
 
             List<decimal> actualResult = BudgetTracker.Transactions.Services.TransactionTotalsService.GetTotalsForTransactions(triggerTransactions, triggerFromDate);
 
-            Assert.That(actualResult, Has.Count.EqualTo(expectedResult.Count));
+            Assert.Multiple(() =>
+            {
+                Assert.That(actualResult, Has.Count.EqualTo(expectedResult.Count));
+
+                for (int i = 0; i < actualResult.Count; i++)
+                {
+                    Assert.That(expectedResult[i], Is.EqualTo(actualResult[i]), $"Day {i}");
+                }
+            });
         }
     }
 }
