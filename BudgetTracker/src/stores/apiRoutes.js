@@ -7,9 +7,8 @@ export const useApiRoutes = defineStore('apiRoutes', () =>
     const accountUrl = `${baseUrl}/account`;
     const profilePictureUrl = `${baseUrl}/profilePicture`;
     const transactionsUrl = `${baseUrl}/transactions`;
-    const totalExpensesUrl = `${baseUrl}/totalExpenses`;
     const totalIncomeUrl = `${baseUrl}/totalIncome`;
-    const dayTotalUrl = `${baseUrl}/dayTotal`;
+    const dayTotalUrl = `${baseUrl}/dayTotals`;
     const dayTotalIncomeUrl = `${dayTotalUrl}/income`;
     const dayTotalExpensesUrl = `${dayTotalUrl}/expense`;
     const dayTotalDifferenceUrl = `${dayTotalUrl}/difference`;
@@ -19,7 +18,6 @@ export const useApiRoutes = defineStore('apiRoutes', () =>
         loginUrl,
         accountUrl,
         profilePictureUrl,
-        totalExpensesUrl,
         totalIncomeUrl,
         transactionsUrl,
         dayTotalUrl,
