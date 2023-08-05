@@ -25,7 +25,37 @@ namespace BudgetTracker.Transactions.Services
                     .Where(t => t.AccountUid == accountUid && t.TimeOfPurchase >= fromDate)
                     .ToList();
 
-            return GetTotalsForTransactions(allTransactionsSinceFromDate, fromDate);
+            List<Transaction> filteredTransactions = FilterTransactionsByType(allTransactionsSinceFromDate, totalType);
+
+            return GetTotalsForTransactions(filteredTransactions, fromDate);
+        }
+
+        internal static List<Transaction> FilterTransactionsByType(List<Transaction> transactions, TotalType type)
+        {
+            List<Transaction> returnValue;
+
+            if (type == TotalType.Income)
+            {
+                returnValue = transactions
+                                .Where(t => t.Amount > 0)
+                                .ToList();
+            }
+            else if (type == TotalType.Expenses)
+            {
+                returnValue = transactions
+                                .Where(t => t.Amount < 0)
+                                .ToList();
+            }
+            else if (type == TotalType.Difference)
+            {
+                returnValue = transactions;
+            }
+            else
+            {
+                throw new NotImplementedException($"TotalType '{type}' not implemented");
+            }
+
+            return returnValue;
         }
 
         internal static List<decimal> GetTotalsForTransactions(List<Transaction> allTransactions, DateTime fromDate)
