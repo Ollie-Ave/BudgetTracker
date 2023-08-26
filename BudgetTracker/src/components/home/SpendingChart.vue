@@ -88,21 +88,21 @@ onMounted( async () => {
     const accountData = await accountDataStore.getAccountData(loggedInStore.apiKey);
 
     const ExpensesData = {
-    label: 'Outgoing',
+    label: 'Outgoing (£)',
     backgroundColor: dot_colour,
     borderColor: colour_primary_300,
     data: await getAccountExpenses(accountData.uid)
     };
 
     const incomeData = {
-        label: 'Incoming',
+        label: 'Incoming (£)',
         backgroundColor: dot_colour,
         borderColor: colour_success,
         data: await getAccountIncome(accountData.uid)
     }
 
     const differenceData = {
-        label: 'Difference',
+        label: 'Difference (£)',
         backgroundColor: dot_colour,
         borderColor: colour_warning,
         data: await getAccountDifferences(accountData.uid)
