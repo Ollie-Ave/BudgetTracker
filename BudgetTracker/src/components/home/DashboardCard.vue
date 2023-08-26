@@ -1,6 +1,7 @@
 <script setup>
 import { computed } from 'vue';
 import formatCurrency from '@/sharedLogic/formatCurrency';
+import Spinner from '@/components/shared/Spinner.vue';
 
 const props = defineProps(['title', 'amount', 'icon']);
 
@@ -16,8 +17,10 @@ const ammountIsPositive = computed(() => props.amount > 0 ? 'positive' : 'negati
                 <div class="dot"></div>
                 <h4>{{ title }}</h4>
             </div>
-    
-            <p :class=ammountIsPositive>{{ formattedAmount }}</p>
+
+            <p  v-if="amount !== null" :class=ammountIsPositive>{{ formattedAmount }}</p>
+
+            <Spinner v-else class="spinner-style" />
         </div>
 
         <div class="img">
@@ -27,6 +30,13 @@ const ammountIsPositive = computed(() => props.amount > 0 ? 'positive' : 'negati
 </template>
 
 <style scoped>
+.spinner-style{
+    position: relative;
+
+    top: 1.5rem;
+    left: 1rem;
+}
+
 .container {
     position: relative;
     overflow: hidden;
@@ -67,7 +77,7 @@ img {
     width: 100px;
     aspect-ratio: 1/1;
 
-    
+
     position: relative;
     bottom: 3rem;
     left: 7rem;

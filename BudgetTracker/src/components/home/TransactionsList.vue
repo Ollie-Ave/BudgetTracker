@@ -12,6 +12,8 @@ import handleApiError from '@/sharedLogic/handleApiErrors';
 
 import { toast } from 'vue3-toastify'
 import axios from 'axios';
+
+import Spinner from '@/components/shared/Spinner.vue';
 import SpinnerButton from '@/components/shared/SpinnerButton.vue';
 
 const apiRoutesStore = useApiRoutes();
@@ -67,11 +69,11 @@ async function deleteTransaction(id) {
         const newBalance = await axios.delete(`${apiRoutesStore.transactionsUrl}/${id}?apiKey=${loggedInStore.apiKey}`);
 
         accountDataStore.updateBalance(newBalance.data);
-        
+
         await removeTransactionFromList(id, newBalance.data);
 
         emit('balanceUpdated');
-        
+
         toast.success('Transaction Deleted');
     }
     catch (error) {
@@ -92,9 +94,9 @@ async function removeTransactionFromList(id, newBalance) {
         for (const element of elementsWithDeletedClass) {
             element.classList.remove('deleted');
         }
-        
+
         await refreshTransactions(newBalance);
-    }, 600);    
+    }, 600);
 }
 
 async function refreshTransactions(newBalance) {
@@ -128,17 +130,17 @@ async function addTransaction() {
     if (validationResult === true) {
         try {
             const newBalance = await axios.post(`${apiRoutesStore.transactionsUrl}/${accountData.uid}?apiKey=${loggedInStore.apiKey}`, newTransactionModel.value);
-            
+
             await refreshTransactions(newBalance.data);
-            
+
             editSaveButton.value.resetState();
-    
+
             newTransactionModel.value = {
                 placeOfPurchase: '',
                 amount: 0,
                 timeOfPurchase: ''
             };
-    
+
             toggleAddTransactionModal();
 
             toast.success('Transaction Added');
@@ -180,8 +182,8 @@ function validateInputtedTransaction(transaction) {
             <hr>
         </div>
 
-        <div class="transactions">
-            <div v-for="transaction in transactions">
+        <div v-if="transactions !== []" class="transactions">
+            <div  v-for="transaction in transactions">
                 <div class="transaction"  :id="transaction.uid">
                     <TransactionItem :transaction=transaction @deleteTransaction="deleteTransaction(transaction.uid)" @refreshTransactions="refreshTransactions"/>
                 </div>
@@ -189,15 +191,16 @@ function validateInputtedTransaction(transaction) {
             </div>
 
             <div class="load-more" v-if="moreToShow">
-                <SpinnerButton ref="loadMoreButton" :clickCallback="loadMoreTransactions" buttonText='Load More' />
+                <SpinnerButton  ref="loadMoreButton" :clickCallback="loadMoreTransactions" buttonText='Load More' />
             </div>
             <div class="load-more" v-if="moreToShow == false">
                 <p class="text-muted">That's it! You've no more transactions to show.</p>
             </div>
         </div>
+        <Spinner v-else class="spinner-style" />
 
         <div class="footer-container">
-            
+
             <hr>
 
             <div class="footer">
@@ -205,7 +208,7 @@ function validateInputtedTransaction(transaction) {
                     <i class="bi bi-wallet"></i>
                     <h4>Missing Transaction?</h4>
                 </div>
-    
+
                 <button class="btn btn-proceed" @click=toggleAddTransactionModal>Add New.</button>
             </div>
 
@@ -216,7 +219,7 @@ function validateInputtedTransaction(transaction) {
                             <h2>Add New Transaction</h2>
                             <hr>
                         </div>
-                        
+
                         <div class="input-field">
                             <label for="placeOfPurchase">Place of Purchase:</label>
                             <input type="text" v-model="newTransactionModel.placeOfPurchase" class="text-input"/>
@@ -244,6 +247,10 @@ function validateInputtedTransaction(transaction) {
 </template>
 
 <style scoped>
+.spinner-style{
+    margin: 2rem auto;
+}
+
 .container{
     position: relative;
     height: 80vh;
@@ -251,7 +258,7 @@ function validateInputtedTransaction(transaction) {
 
     display: flex;
     flex-direction: column;
-    
+
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: 0px;  /* Firefox */
 }
