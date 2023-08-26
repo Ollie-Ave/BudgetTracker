@@ -9,9 +9,6 @@ export const useApiRoutes = defineStore('apiRoutes', () =>
     const transactionsUrl = `${baseUrl}/transactions`;
     const totalIncomeUrl = `${baseUrl}/totalIncome`;
     const dayTotalUrl = `${baseUrl}/dayTotals`;
-    const dayTotalIncomeUrl = `${dayTotalUrl}/income`;
-    const dayTotalExpensesUrl = `${dayTotalUrl}/expense`;
-    const dayTotalDifferenceUrl = `${dayTotalUrl}/difference`;
 
     return {
         baseUrl,
@@ -21,8 +18,5 @@ export const useApiRoutes = defineStore('apiRoutes', () =>
         totalIncomeUrl,
         transactionsUrl,
         dayTotalUrl,
-        dayTotalIncomeUrl,
-        dayTotalExpensesUrl,
-        dayTotalDifferenceUrl
     }
 });

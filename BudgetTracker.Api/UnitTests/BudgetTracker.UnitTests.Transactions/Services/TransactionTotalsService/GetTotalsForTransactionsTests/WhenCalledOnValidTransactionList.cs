@@ -56,7 +56,8 @@ namespace BudgetTracker.UnitTests.Transactions.TransactionTotalsService.GetTotal
             {
                 333 + 33 - 3,
                 22 - 2,
-                0
+                0,
+                0,
             };
 
             List<decimal> actualResult = BudgetTracker.Transactions.Services.TransactionTotalsService.GetTotalsForTransactions(triggerTransactions, triggerFromDate);

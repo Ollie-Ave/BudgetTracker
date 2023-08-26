@@ -13,7 +13,7 @@ namespace BudgetTracker.UnitTests.Transactions.TransactionTotalsService.GetTotal
         {
             List<Transaction> triggerTransactions = new();
 
-            DateTime triggerFromDate = DateTime.UtcNow.AddDays(-3);
+            DateTime triggerFromDate = DateTime.UtcNow.AddDays(-2);
 
             List<decimal> expectedResult = new()
             {

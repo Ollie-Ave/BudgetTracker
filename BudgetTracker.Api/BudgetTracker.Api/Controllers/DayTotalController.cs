@@ -22,13 +22,13 @@
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetTotals(int id, [FromQuery] string api, [FromQuery] int days, [FromQuery] TotalType totalType)
+        public IActionResult GetTotals(int id, [FromQuery] string apiKey, [FromQuery] int days, [FromQuery] TotalType totalType)
         {
             IActionResult returnValue = this.Unauthorized();
 
-            if (this.authenticationService.ApiKeyIsValid(api))
+            if (this.authenticationService.ApiKeyIsValid(apiKey))
             {
-                DateTime dateToGetFrom = DateTime.Now.AddDays(days * -1);
+                DateTime dateToGetFrom = DateTime.Now.Date.AddDays((days - 1) * -1); // Do one less day as we are inclusive of today in our calcs.
 
                 returnValue = this.Ok(this.transactionTotalsService.GetTotalsFrom(id, dateToGetFrom, totalType));
             }
