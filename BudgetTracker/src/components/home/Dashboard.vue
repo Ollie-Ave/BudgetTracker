@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 
 import DashboardCard from '@/components/home/DashboardCard.vue';
 import TransactionList from '@/components/home/TransactionsList.vue';
@@ -13,30 +13,22 @@ import handleApiError from '@/sharedLogic/handleApiErrors';
 import axios from 'axios';
 import SpendingChart from './SpendingChart.vue';
 
-
-
 const accountDataStore = useAccountData();
 const loggedInStore = useLoginStore();
 const apiRoutesStore = useApiRoutes();
 
-const accountData = await accountDataStore.getAccountData(loggedInStore.apiKey);
+let accountData = null;
 
-async function getAccountBalance() {
-    const accountData = await accountDataStore.getAccountData(loggedInStore.apiKey);
-    balance.value = accountData.balance;
+// Account balance feature
+const balance = ref(null);
+
+async function updateAccountBalance()
+{
+    balance.value = await accountDataStore.getAccountData(loggedInStore.apiKey);
 }
 
-const balance = ref(0.0);
-const expenses = ref(0.0);
-
-await getAccountBalance();
-await getAccountExpenses(accountData.uid);
-
-const income = ref(await getAccountIncome(accountData.uid));
-
-watch(balance, async () => {
-    await getAccountExpenses(accountData.uid);
-});
+// Expenses Data feature
+const expenses = ref(null);
 
 async function getAccountExpenses(uid) {
     try {
@@ -52,6 +44,17 @@ async function getAccountExpenses(uid) {
     }
 }
 
+watch(balance, async () => {
+    if (accountData !== null)
+    {
+        await getAccountExpenses(accountData.uid);
+    }
+});
+
+// Account Income feature
+
+const income = ref(null);
+
 async function getAccountIncome(uid) {
     try {
         const response = await axios.get(`${apiRoutesStore.totalIncomeUrl}/${uid}?apiKey=${loggedInStore.apiKey}`);
@@ -63,6 +66,18 @@ async function getAccountIncome(uid) {
         return 0;
     }
 }
+
+// On Mount
+
+onMounted(async () => {
+     accountData = await accountDataStore.getAccountData(loggedInStore.apiKey);
+
+    balance.value = accountData.balance;
+
+    income.value = await getAccountIncome(accountData.uid)
+});
+
+
 </script>
 
 <template>
@@ -89,7 +104,7 @@ async function getAccountIncome(uid) {
         </div>
 
         <div class="right card">
-                <TransactionList @balanceUpdated="getAccountBalance" />
+                <TransactionList @balanceUpdated="updateAccountBalance" />
         </div>
     </div>
 
@@ -103,7 +118,22 @@ async function getAccountIncome(uid) {
   grid-template-columns: 5fr 3fr;
   grid-gap: 2rem;
 
-  height: 100%;
+  height: 80vh;
+
+  overflow-y: scroll;
+  -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: 0px;  /* Firefox */
+}
+
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+@media (max-width: 1280px) {
+    .dashboard{
+        grid-template-columns: 1fr;
+    }
 }
 
 .dashboard > div{
