@@ -35,7 +35,7 @@
         {
             IActionResult returnValue = this.Unauthorized();
 
-            if (this.authenticationService.TryValidateApiKey(apiKey, out string _))
+            if (this.authenticationService.ApiKeyIsValid(apiKey))
             {
                 decimal totalIncome = this.accountService.GetTotalIncomePerMonth(id);
 

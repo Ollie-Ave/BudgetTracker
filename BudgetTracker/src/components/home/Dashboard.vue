@@ -40,7 +40,9 @@ watch(balance, async () => {
 
 async function getAccountExpenses(uid) {
     try {
-        const response = await axios.get(`${apiRoutesStore.totalExpensesUrl}/${uid}?apiKey=${loggedInStore.apiKey}`);
+        const queryString = `apiKey=${loggedInStore.apiKey}&days=30&totalType=expenses`;
+
+        const response = await axios.get(`${apiRoutesStore.dayTotalUrl}/sum/${uid}?${queryString}`);
         expenses.value = response.data;
     }
     catch (error) {
@@ -59,7 +61,7 @@ async function getAccountIncome(uid) {
         await handleApiError(error);
 
         return 0;
-    }   
+    }
 }
 </script>
 
@@ -100,7 +102,7 @@ async function getAccountIncome(uid) {
 
   grid-template-columns: 5fr 3fr;
   grid-gap: 2rem;
-  
+
   height: 100%;
 }
 

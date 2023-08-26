@@ -8,6 +8,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddTransactionServices(this IServiceCollection services)
         {
             services.AddScoped<ITransactionService, TransactionService>();
+            services.AddScoped<ITransactionTotalsService, TransactionTotalsService>();
 
             return services;
         }

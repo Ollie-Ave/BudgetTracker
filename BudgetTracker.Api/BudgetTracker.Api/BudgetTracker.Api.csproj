@@ -4,6 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>disable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,7 +19,7 @@
     <ProjectReference Include="../BudgetTracker.Authentication/BudgetTracker.Authentication.csproj" />
     <ProjectReference Include="../BudgetTracker.DataAccess/BudgetTracker.DataAccess.csproj" />
     <ProjectReference Include="../BudgetTracker.Accounts/BudgetTracker.Accounts.csproj" />
-    <ProjectReference Include="..\BudgetTracker.Transactions\BudgetTracker.Transactions.csproj" />
+    <ProjectReference Include="../BudgetTracker.Transactions/BudgetTracker.Transactions.csproj" />
   </ItemGroup>
 
 </Project>

@@ -8,7 +8,7 @@ namespace BudgetTracker.Accounts.Interfaces
         /// <summary>Gets account from email.</summary>
         /// <param name="email">The email.</param>
         /// <returns>The account from email.</returns>
-		public AccountViewModel GetAccountFromEmail(string email);
+		public AccountViewModel GetAccountFromUid(int uid);
 
         /// <summary>Gets total income per month.</summary>
         /// <param name="id">The identifier.</param>

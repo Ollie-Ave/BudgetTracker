@@ -5,6 +5,7 @@ import { useAccountData } from '@/stores/accountData';
 import { useLoginStore } from '@/stores/loggedIn';
 import { useApiRoutes } from '@/stores/apiRoutes';
 
+import handleApiError from '@/sharedLogic/handleApiErrors';
 import axios from 'axios';
 
 import { Line } from 'vue-chartjs';
@@ -24,12 +25,16 @@ const dot_colour = '#000';
 
 async function getAccountExpenses(uid) {
     try {
-        const response = await axios.get(`${apiRoutesStore.dayTotalExpensesUrl}/${uid}?apiKey=${loggedInStore.apiKey}`);
-        return response.data.reverse();
+        const queryString = `apiKey=${loggedInStore.apiKey}&days=7&totalType=expenses`
+
+        const response = await axios.get(`${apiRoutesStore.dayTotalUrl}/${uid}?${queryString}`);
+        console.log(response.data);
+
+        return response.data;
     }
     catch (error) {
         console.log(error)
-        // await handleApiError(error);
+        await handleApiError(error);
 
         return 0;
     }
@@ -37,12 +42,15 @@ async function getAccountExpenses(uid) {
 
 async function getAccountIncome(uid) {
     try {
-        const response = await axios.get(`${apiRoutesStore.dayTotalIncomeUrl}/${uid}?apiKey=${loggedInStore.apiKey}`);
-        return response.data.reverse();
+        const queryString = `apiKey=${loggedInStore.apiKey}&days=7&totalType=income`
+
+        const response = await axios.get(`${apiRoutesStore.dayTotalUrl}/${uid}?${queryString}`);
+        console.log(response.data);
+        return response.data;
     }
     catch (error) {
         console.log(error)
-        // await handleApiError(error);
+        await handleApiError(error);
 
         return 0;
     }
@@ -50,12 +58,15 @@ async function getAccountIncome(uid) {
 
 async function getAccountDifferences(uid) {
     try {
-        const response = await axios.get(`${apiRoutesStore.dayTotalDifferenceUrl}/${uid}?apiKey=${loggedInStore.apiKey}`);
-        return response.data.reverse();
+        const queryString = `apiKey=${loggedInStore.apiKey}&days=7&totalType=difference`
+
+        const response = await axios.get(`${apiRoutesStore.dayTotalUrl}/${uid}?${queryString}`);
+        console.log(response.data);
+        return response.data;
     }
     catch (error) {
         console.log(error)
-        // await handleApiError(error);
+        await handleApiError(error);
 
         return 0;
     }

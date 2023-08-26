@@ -1,9 +1,7 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System.Threading;
-
 namespace BudgetTracker.Api.Controllers
 {
+    using Microsoft.AspNetCore.Mvc;
+    
     [ApiController]
     [Route("api/[controller]")]
     public class HelloWorldController : ControllerBase
@@ -11,8 +9,6 @@ namespace BudgetTracker.Api.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            Thread.Sleep(1000);
-
             return this.Ok("Hello World!");
         }
     }
